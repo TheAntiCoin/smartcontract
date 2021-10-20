@@ -403,6 +403,7 @@ contract AntiCoin is Context, IERC20, Ownable {
 
     address payable public marketingWalletAddress = payable(0x312466Ccd54e8988E91897f0bD1055043F410Bca); 
     address payable public buyBackWalletAddress = payable(0x1BbDd43b7Ae0D694Bf37aACf1f33C083404f5886);
+    address payable public devWalletAddress = payable(0x1BbDd43b7Ae0D694Bf37aACf1f33C083404f5886);
     address public immutable deadAddress = 0x000000000000000000000000000000000000dEaD;
     
     mapping (address => uint256) _balances;
@@ -415,6 +416,7 @@ contract AntiCoin is Context, IERC20, Ownable {
     uint256 public _liquidityFee = 10;
     uint256 public _marketingFee = 20;
     uint256 public _buyBackFee = 10;
+    uint256 public _devFee = 5;
     uint256 public _extraFeeOnSell = 20; 
     uint256 public _totalTaxIfBuying = 0;
     uint256 public _totalTaxIfSelling = 0;
@@ -468,7 +470,7 @@ contract AntiCoin is Context, IERC20, Ownable {
         isExcludedFromFee[owner()] = true;
         isExcludedFromFee[address(this)] = true;
         
-        _totalTaxIfBuying = _liquidityFee.add(_marketingFee).add(_buyBackFee);
+        _totalTaxIfBuying = _liquidityFee.add(_marketingFee).add(_buyBackFee).add(_devFee);
         _totalTaxIfSelling = _totalTaxIfBuying.add(_extraFeeOnSell);
 
         isWalletLimitExempt[owner()] = true;
@@ -537,13 +539,14 @@ contract AntiCoin is Context, IERC20, Ownable {
         isExcludedFromFee[account] = newValue;
     }
 
-    function setTaxes(uint256 newLiquidityTax, uint256 newMarketingTax, uint256 newBuyBackTax, uint256 newExtraFeeOnSell) external onlyOwner() {
+    function setTaxes(uint256 newLiquidityTax, uint256 newMarketingTax, uint256 newBuyBackTax, uint256 newExtraFeeOnSell, uint256 newDevTax) external onlyOwner() {
         _liquidityFee = newLiquidityTax;
         _marketingFee = newMarketingTax;
         _buyBackFee = newBuyBackTax;
+        _devFee = newDevTax;
         _extraFeeOnSell = newExtraFeeOnSell;
 
-        _totalTaxIfBuying = _liquidityFee.add(_marketingFee).add(_buyBackFee);
+        _totalTaxIfBuying = _liquidityFee.add(_marketingFee).add(_buyBackFee).add(_devFee);
         _totalTaxIfSelling = _totalTaxIfBuying.add(_extraFeeOnSell);
     }
 
@@ -683,10 +686,12 @@ contract AntiCoin is Context, IERC20, Ownable {
         
         uint256 amountBNBLiquidity = amountReceived.mul(_liquidityFee).div(totalBNBFee).div(2);
         uint256 amountBNBBuyBack = amountReceived.mul(_buyBackFee).div(totalBNBFee);
+        uint256 amountBNBDev = amountReceived.mul(_devFee).div(totalBNBFee);
         uint256 amountBNBMarketing = amountReceived.sub(amountBNBLiquidity).sub(amountBNBBuyBack);
 
         transferToAddressETH(marketingWalletAddress, amountBNBMarketing);
         transferToAddressETH(buyBackWalletAddress, amountBNBBuyBack);
+        transferToAddressETH(devWalletAddress, amountBNBDev);
         addLiquidity(tokensForLP, amountBNBLiquidity);
     }
     
