@@ -413,11 +413,11 @@ contract AntiCoin is Context, IERC20, Ownable {
     mapping (address => bool) public isWalletLimitExempt;
     mapping (address => bool) public isBlacklisted;
 
-    uint256 public _liquidityFee = 10;
-    uint256 public _marketingFee = 20;
-    uint256 public _buyBackFee = 10;
-    uint256 public _devFee = 5;
-    uint256 public _extraFeeOnSell = 20; 
+    uint256 public _liquidityFee = 4;
+    uint256 public _marketingFee = 4;
+    uint256 public _buyBackFee = 6;
+    uint256 public _devFee = 2;
+    uint256 public _extraFeeOnSell = 4; 
     uint256 public _totalTaxIfBuying = 0;
     uint256 public _totalTaxIfSelling = 0;
 
