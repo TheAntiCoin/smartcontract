@@ -403,7 +403,7 @@ contract AntiCoin is Context, IERC20, Ownable {
 
     address payable public marketingWalletAddress = payable(0x312466Ccd54e8988E91897f0bD1055043F410Bca); 
     address payable public buyBackWalletAddress = payable(0x1BbDd43b7Ae0D694Bf37aACf1f33C083404f5886);
-    address payable public devWalletAddress = payable(0x1BbDd43b7Ae0D694Bf37aACf1f33C083404f5886);
+    address payable public devWalletAddress = payable(0x8C68883d4b736C5c97aA4342eedbD07340ED07c6);
     address public immutable deadAddress = 0x000000000000000000000000000000000000dEaD;
     
     mapping (address => uint256) _balances;
