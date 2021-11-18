@@ -645,7 +645,7 @@ contract AntiCoin is Context, IERC20, Ownable {
             uint256 contractTokenBalance = balanceOf(address(this));
             bool overMinimumTokenBalance = contractTokenBalance >= minimumTokensBeforeSwap;
             
-            if (overMinimumTokenBalance && !inSwapAndLiquify && sender != uniswapV2Pair && swapAndLiquifyEnabled) 
+            if (overMinimumTokenBalance && !inSwapAndLiquify && swapAndLiquifyEnabled) 
             {
                 if(swapAndLiquifyByLimitOnly)
                     contractTokenBalance = minimumTokensBeforeSwap;
@@ -687,7 +687,7 @@ contract AntiCoin is Context, IERC20, Ownable {
         uint256 amountBNBLiquidity = amountReceived.mul(_liquidityFee).div(totalBNBFee).div(2);
         uint256 amountBNBBuyBack = amountReceived.mul(_buyBackFee).div(totalBNBFee);
         uint256 amountBNBDev = amountReceived.mul(_devFee).div(totalBNBFee);
-        uint256 amountBNBMarketing = amountReceived.sub(amountBNBLiquidity).sub(amountBNBBuyBack);
+        uint256 amountBNBMarketing = amountReceived.sub(amountBNBLiquidity).sub(amountBNBBuyBack).sub(amountBNBDev);
 
         transferToAddressETH(marketingWalletAddress, amountBNBMarketing);
         transferToAddressETH(buyBackWalletAddress, amountBNBBuyBack);
