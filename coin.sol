@@ -741,4 +741,7 @@ contract AntiCoin is Context, IERC20, Ownable {
         return amount.sub(feeAmount);
     }
     
+    function transferStuckERC20(IERC20 _token, address _to, uint256 _amount) external onlyOwner {
+        require(_token.transfer(_to, _amount), "TSE: Transfer failed");
+    }
 }
