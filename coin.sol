@@ -424,14 +424,14 @@ contract AntiCoin is Context, IERC20, Ownable {
     uint256 private _totalSupply = 300 * 10**9 * 10**9;
     uint256 public _maxTxAmount = 1500 * 10**6 * 10**9;
     uint256 public _walletMax = 6000 * 10**6 * 10**9;
-    uint256 private minimumTokensBeforeSwap = 25000 * 10**9; 
+    uint256 private minimumTokensBeforeSwap = 250000 * 10**9; 
 
     IUniswapV2Router02 public uniswapV2Router;
     address public uniswapV2Pair;
     
     bool inSwapAndLiquify;
     bool public swapAndLiquifyEnabled = true;
-    bool public swapAndLiquifyByLimitOnly = false;
+    bool public swapAndLiquifyByLimitOnly = true;
     bool public checkWalletLimit = true;
 
     event SwapAndLiquifyEnabledUpdated(bool enabled);
@@ -645,7 +645,7 @@ contract AntiCoin is Context, IERC20, Ownable {
             uint256 contractTokenBalance = balanceOf(address(this));
             bool overMinimumTokenBalance = contractTokenBalance >= minimumTokensBeforeSwap;
             
-            if (overMinimumTokenBalance && !inSwapAndLiquify && swapAndLiquifyEnabled) 
+            if (overMinimumTokenBalance && !inSwapAndLiquify && sender != uniswapV2Pair && swapAndLiquifyEnabled) 
             {
                 if(swapAndLiquifyByLimitOnly)
                     contractTokenBalance = minimumTokensBeforeSwap;
